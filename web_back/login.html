@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!-- 引入bootstrap的css文件 -->
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
+
 </head>
 
 <body>
@@ -28,9 +31,73 @@
                 <input type="submit" class="input_sub" value="登 录">
             </form>
         </div>
+        <!-- 引用bootstrap提示 -->
+        <!-- Button trigger modal -->
+        <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            Launch demo modal
+        </button> -->
 
-    </div> 
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <!--   <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </body>
+<script src="./js/jquery-1.12.4.min.js"></script>
+<!-- 导入bootstrap的js文件 -->
+<script src="./js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $('.input_sub').on('click', function (e) {
+            //阻止默认跳转
+            e.preventDefault();
+            //获取用户输入的账号和密码
+            var username = $('.input_txt').val().trim();
+            var password = $('.input_pass').val().trim();
+            //判断用户输入的账号或者密码是否为空
+            if (username == "" || password == "") {
+                //为空的话提示账号或者密码为空,直接退出
+                //弹出模态框
+                $('.modal-body').text("账号或者密码为空!");
+                $('#myModal').modal({
+                    keyboard: true //键盘上的 esc 键被按下时关闭模态框
+                });
+            }
+            $.ajax({
+                type: "post",
+                url: "http://localhost:8000/admin/login",
+                data: { user_name: username, password: password },
+                success: function (backData) {
+                    if (backData.code == 200) {
+                        window.location.href = 'index.html'
+                    } else {
+                        $('.modal-body').text("账号或者密码错误!");
+                        $('#myModal').modal({
+                            keyboard: true //键盘上的 esc 键被按下时关闭模态框
+                        });
+                    };
+                }
+
+            });
+        });
+    });
+</script>
 
 </html>
